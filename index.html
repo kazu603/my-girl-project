@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MY GIRL, MY GIRL — Special for Wilda</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Font System */
+            --font-display: "Cormorant Garamond", Georgia, serif;
+            --font-body: "Manrope", "Trebuchet MS", sans-serif;
+            --font-accent: "Great Vibes", "Brush Script MT", cursive;
+            
+            /* Color Palette */
+            --bg-dark: #050811;
+            --bg-panel: rgba(137, 194, 217, 0.03);
+            --color-white: #ffffff;
+            --color-blue: #89c2d9;
+            --color-silver: #e0e1dd;
+            --color-lavender: #cdd0ff;
+            --color-dim: rgba(255, 255, 255, 0.6);
+            --border-light: rgba(137, 194, 217, 0.2);
+            --glow-blue: rgba(137, 194, 217, 0.3);
+            
+            /* Layout & Spacing */
+            --pad-main: clamp(1.5rem, 5vw, 3rem);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            color: var(--color-white);
+            font-family: var(--font-body);
+            overflow: hidden; /* Prevent native scrolling, handle via sections */
+            position: relative;
+        }
+
+        /* Typography */
+        h1, h2, h3, .display-text {
+            font-family: var(--font-display);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: 0.05em;
+        }
+
+        p {
+            font-family: var(--font-body);
+            font-weight: 300;
+            line-height: 1.7;
+            font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+            color: var(--color-silver);
+        }
+
+        .accent-text {
+            font-family: var(--font-accent);
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            color: var(--color-blue);
+            font-weight: normal;
+        }
+
+        /* Utility */
+        .hidden { display: none !important; }
+        .glass {
+            background: var(--bg-panel);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(137,194,217,0.05) 0%, transparent 70%);
+        }
+        .particles {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--color-white);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--color-white), 0 0 20px var(--color-blue);
+            opacity: 0;
+            animation: floatParticle 8s infinite linear;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+
+        /* Opening Cinematic */
+        #opening {
+            position: fixed;
+            inset: 0;
+            background-color: var(--bg-dark);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--pad-main);
+            transition: opacity 1.5s ease, filter 1.5s ease;
+        }
+        .op-text {
+            position: absolute;
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY(20px);
+            transition: all 2s ease;
+        }
+        .op-text.show {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+        .btn-premium {
+            background: transparent;
+            color: var(--color-white);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            padding: 15px 30px;
+            border: 1px solid var(--border-light);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px transparent;
+            margin-top: 40px;
+        }
+        .btn-premium:active {
+            transform: scale(0.95);
+        }
+        .btn-premium.glow:hover, .btn-premium.glow {
+            border-color: var(--color-blue);
+            box-shadow: 0 0 20px var(--glow-blue);
+            background: rgba(137,194,217,0.05);
+        }
+
+        /* Main Container & Sections */
+        #main-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            z-index: 10;
+        }
+
+        .section {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            padding: var(--pad-main);
+            padding-bottom: 100px; /* Space for nav */
+            padding-top: 80px; /* Space for music player */
+            overflow-y: auto;
+            align-items: center;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.98);
+        }
+        .section.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+        
+        /* Custom Scrollbar for Sections */
+        .section::-webkit-scrollbar { width: 4px; }
+        .section::-webkit-scrollbar-track { background: transparent; }
+        .section::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 10px; }
+
+        /* Images */
+        .premium-img-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 30px auto;
+            position: relative;
+            border-radius: var(--radius);
+            padding: 10px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 30px var(--glow-blue);
+        }
+        .premium-img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4/5;
+            object-fit: cover;
+            border-radius: calc(var(--radius) - 4px);
+            filter: brightness(0.9) contrast(1.1);
+            background-color: #1a2235; /* Fallback */
+            display: block;
+        }
+
+        /* Layout specific */
+        .text-center { text-align: center; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        
+        .title-large {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: var(--color-white);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--glow-blue);
+        }
+        .title-medium { font-size: clamp(1.8rem, 6vw, 2.5rem); margin-bottom: 15px; }
+        .subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-blue);
+            margin-bottom: 10px;
+        }
+
+        /* Story & Letter Section */
+        .letter-content {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 30px;
+        }
+        .letter-content p { margin-bottom: 1.5rem; }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .gallery-item:active { transform: scale(0.95); }
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s;
+        }
+        .gallery-label {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            padding: 10px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            color: var(--color-white);
+            letter-spacing: 0.05em;
+        }
+
+        /* Lightbox */
+        #lightbox {
+            position: fixed; inset: 0;
+            background: rgba(5, 8, 17, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        #lightbox.active { opacity: 1; pointer-events: auto; }
+        #lightbox img {
+            max-width: 90%; max-height: 80vh;
+            border-radius: var(--radius);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            border: 1px solid var(--border-light);
+        }
+        .btn-close {
+            position: absolute; top: 30px; right: 30px;
+            background: none; border: none; color: white;
+            font-size: 2rem; font-family: var(--font-body);
+            font-weight: 300; cursor: pointer;
+        }
+
+        /* Game System */
+        .game-container {
+            width: 100%; max-width: 400px;
+            margin: auto; text-align: center;
+        }
+        .game-q {
+            font-family: var(--font-display); font-size: 1.5rem;
+            margin-bottom: 2rem; line-height: 1.4;
+        }
+        .game-options {
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .btn-game {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-light);
+            color: var(--color-white);
+            padding: 15px; border-radius: 12px;
+            font-family: var(--font-body); font-size: 0.9rem;
+            cursor: pointer; transition: all 0.3s;
+            position: relative;
+        }
+        .btn-game:active { transform: scale(0.97); }
+        .btn-game.correct { background: rgba(137,194,217,0.2); border-color: var(--color-blue); }
+        .btn-game.wrong { background: rgba(255,100,100,0.1); border-color: rgba(255,100,100,0.3); }
+        
+        .game-feedback {
+            margin-top: 2rem; min-height: 80px; opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .game-feedback.show { opacity: 1; }
+
+        /* Lyrics Mode */
+        .lyrics-container {
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center; gap: 20px;
+            padding: 20px;
+        }
+        .lyric-line {
+            transition: all 0.5s ease;
+            opacity: 0.3; filter: blur(2px);
+            font-size: 1rem;
+            transform: scale(0.9);
+        }
+        .lyric-current {
+            opacity: 1; filter: blur(0);
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            color: var(--color-blue);
+            transform: scale(1);
+            font-family: var(--font-display);
+            text-shadow: 0 0 15px var(--glow-blue);
+        }
+
+        /* Music Controller */
+        #music-controller {
+            position: fixed; top: 20px; right: 20px;
+            background: rgba(10, 15, 30, 0.6);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-light);
+            border-radius: 30px;
+            padding: 8px 15px;
+            display: flex; align-items: center; gap: 10px;
+            z-index: 500;
+            opacity: 0; pointer-events: none;
+            transition: opacity 1s;
+        }
+        #music-controller.show { opacity: 1; pointer-events: auto; }
+        .music-info { font-size: 0.7rem; letter-spacing: 0.05em; color: var(--color-silver); }
+        .music-title { font-weight: 600; color: var(--color-white); }
+        .btn-icon {
+            background: none; border: none;
+            color: var(--color-white); cursor: pointer;
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .visualizer { display: flex; gap: 2px; height: 15px; align-items: flex-end; }
+        .bar {
+            width: 3px; background: var(--color-blue); border-radius: 2px;
+            animation: bounce 1s infinite alternate;
+            transform-origin: bottom;
+        }
+        .bar:nth-child(2) { animation-delay: 0.2s; }
+        .bar:nth-child(3) { animation-delay: 0.4s; }
+        .paused .bar { animation-play-state: paused; height: 3px !important; }
+        @keyframes bounce { 0% { height: 3px; } 100% { height: 15px; } }
+
+        /* Navigation */
+        #navigation {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            width: 90%; max-width: 400px;
+            background: rgba(10, 15, 30, 0.8);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border-light);
+            border-radius: 30px;
+            padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 500;
+            opacity: 0; pointer-events: none;
+            transition: opacity 1s;
+        }
+        #navigation.show { opacity: 1; pointer-events: auto; }
+        .nav-btn {
+            background: none; border: none;
+            color: var(--color-white); font-family: var(--font-body);
+            font-size: 0.8rem; letter-spacing: 0.1em;
+            cursor: pointer; padding: 10px;
+            text-transform: uppercase; opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .nav-btn:active { opacity: 1; }
+        .nav-indicator {
+            font-size: 0.75rem; letter-spacing: 0.2em;
+            color: var(--color-blue);
+        }
+
+        /* Easter Egg */
+        .ee-trigger { cursor: pointer; user-select: none; }
+        #ee-modal {
+            position: fixed; inset: 0; z-index: 3000;
+            background: rgba(0,0,0,0.9);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: 0.5s; text-align: center;
+        }
+        #ee-modal.show { opacity: 1; pointer-events: auto; }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Particles Layer -->
+    <div class="ambient-bg" id="ambient"></div>
+
+    <!-- Audio Player -->
+    <!-- Fallback if MP3 missing handled in JS -->
+    <audio id="bg-audio" src="song.mp3" preload="auto"></audio>
+
+    <!-- Music Controller -->
+    <div id="music-controller" class="glass">
+        <button class="btn-icon" id="btn-play-pause">
+            <svg id="icon-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <div class="music-info">
+            <div class="music-title">Our Song</div>
+            <div id="music-time">0:00</div>
+        </div>
+        <div class="visualizer" id="visualizer">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        </div>
+    </div>
+
+    <!-- Opening Cinematic -->
+    <div id="opening">
+        <div class="op-text display-text" id="op-1" style="font-style: italic; font-size: 1.5rem;">for my girl.</div>
+        <div class="op-text display-text" id="op-2" style="font-size: 3rem; letter-spacing: 0.2em; margin: 20px 0;">WILDA</div>
+        <div class="op-text" id="op-3" style="color: var(--color-blue); font-size: 1rem;">there's something I want you to see.</div>
+        
+        <button class="btn-premium glow op-text" id="btn-open">OPEN MY HEART</button>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-container">
+        
+        <!-- Section 01: STORY -->
+        <section class="section" id="sec-1">
+            <div class="premium-img-container">
+                <img src="foto1.jpg" alt="My Girl" class="premium-img" onerror="this.style.display='none'">
+            </div>
+            <div class="text-center">
+                <h1 class="title-large">MY GIRL,<br>MY GIRL.</h1>
+                <p class="mb-4" style="max-width: 300px; margin: 0 auto; margin-top: 20px;">
+                    "Wilda, kalau aku harus memilih satu orang untuk tetap ada di sampingku, aku akan tetap memilih kamu."
+                </p>
+                <div class="subtitle mb-2">01 OCTOBER</div>
+                <div class="accent-text ee-trigger">— Kazu</div> <!-- Easter Egg Trigger -->
+            </div>
+            
+            <div class="text-center" style="margin-top: 80px;">
+                <h2 class="title-medium">IT'S YOU.</h2>
+                <p style="max-width: 320px; margin: 0 auto;">
+                    Entah sejak kapan, senyummu menjadi sesuatu yang selalu ingin aku lihat.<br><br>
+                    Suaramu menjadi sesuatu yang ingin selalu aku dengar.<br><br>
+                    Dan kehadiranmu... menjadi sesuatu yang tidak ingin aku kehilangan.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 02: LETTER -->
+        <section class="section" id="sec-2">
+            <div class="premium-img-container" style="max-width: 250px; margin-bottom: 20px;">
+                <img src="foto2.jpg" alt="Us" class="premium-img" onerror="this.style.display='none'">
+            </div>
+            <div class="glass letter-content">
+                <h2 class="title-medium" style="color: var(--color-blue);">DEAR WILDA,</h2>
+                <p>Kalau suatu hari kamu bertanya kenapa aku masih memilih kamu,<br>jawabannya sederhana.</p>
+                <p>Karena dari sekian banyak orang, kamu adalah orang yang ingin tetap aku perjuangkan.</p>
+                <p>Aku mungkin tidak selalu tahu cara menjadi seseorang yang sempurna untukmu. Tapi aku tahu satu hal: aku ingin terus belajar menjadi seseorang yang pantas berada di sampingmu.</p>
+                <p>Terima kasih sudah menjadi bagian dari cerita hidupku.</p>
+                <p style="font-style: italic; color: var(--color-white); margin-top: 30px;">And if I had to choose again...</p>
+                <p class="display-text" style="font-size: 1.5rem; color: var(--color-white);">I would still choose you.</p>
+                <p class="accent-text" style="margin-top: 20px; text-align: right;">— Kazu</p>
+            </div>
+        </section>
+
+        <!-- Section 03: MEMORIES -->
+        <section class="section" id="sec-3">
+            <div class="text-center mb-4">
+                <div class="subtitle">Our Journey</div>
+                <h2 class="title-medium">MEMORIES</h2>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox('foto1.jpg')">
+                    <img src="foto1.jpg" alt="Memory 1" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='">
+                    <div class="gallery-label">01 — the beginning</div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('foto2.jpg')">
+                    <img src="foto2.jpg" alt="Memory 2" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='">
+                    <div class="gallery-label">02 — your smile</div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('foto3.jpg')">
+                    <img src="foto3.jpg" alt="Memory 3" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='">
+                    <div class="gallery-label">03 — us</div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('foto4.jpg')">
+                    <img src="foto4.jpg" alt="Memory 4" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='">
+                    <div class="gallery-label">04 — my favorite person</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 04: GAMES -->
+        <section class="section" id="sec-4">
+            <div class="game-container glass" style="padding: 30px 20px;">
+                <div class="subtitle" id="game-subtitle">HOW WELL DO YOU KNOW ME?</div>
+                <h2 class="title-medium" id="game-title" style="font-size: 1.5rem; margin-bottom: 30px;">Let's see if my girl really knows me.</h2>
+                
+                <div id="game-content">
+                    <button class="btn-premium glow" onclick="startGame()" style="width: 100%;">START GAME</button>
+                </div>
+                
+                <div class="game-feedback" id="game-feedback"></div>
+            </div>
+        </section>
+
+        <!-- Section 05: LYRICS -->
+        <section class="section" id="sec-5">
+            <div class="text-center">
+                <div class="subtitle">for Wilda</div>
+                <h2 class="title-medium" style="margin-bottom: 0;">OUR SONG</h2>
+            </div>
+            <div class="lyrics-container">
+                <div class="lyric-line" id="lyric-prev"></div>
+                <div class="lyric-current" id="lyric-curr">Lyrics will appear here.</div>
+                <div class="lyric-line" id="lyric-next"></div>
+            </div>
+        </section>
+
+        <!-- Section 06: FINAL -->
+        <section class="section" id="sec-6">
+            <div class="premium-img-container" style="max-width: 300px;">
+                <img src="foto4.jpg" alt="Forever" class="premium-img" onerror="this.style.display='none'">
+            </div>
+            <div class="text-center glass" style="padding: 30px; width: 100%; max-width: 400px;">
+                <h2 class="title-large" style="font-size: 2.5rem;">MY GIRL.</h2>
+                <div class="subtitle mb-2" style="color: var(--color-white);">MY FAVORITE PERSON.<br>MY HOME.</div>
+                
+                <h2 class="display-text" style="color: var(--color-blue); margin: 30px 0 10px 0;">WILDA.</h2>
+                <p>Happy 1 October,<br>my girl.</p>
+                
+                <div class="accent-text" style="margin: 20px 0;">Always,</div>
+                <p style="font-family: var(--font-display); font-size: 1.2rem; letter-spacing: 0.1em;">Kazu.</p>
+                
+                <p style="margin-top: 30px; font-style: italic; color: var(--color-blue);">
+                    you are,<br>and will always be,<br>my girl.
+                </p>
+
+                <button class="btn-premium glow" id="btn-final-music" style="margin-top: 30px; font-size: 0.7rem;">PLAY OUR SONG</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation Bar -->
+    <nav id="navigation">
+        <button class="nav-btn" id="btn-prev">BACK</button>
+        <div class="nav-indicator" id="nav-indicator">01 STORY</div>
+        <button class="nav-btn" id="btn-next">NEXT</button>
+    </nav>
+
+    <!-- Lightbox -->
+    <div id="lightbox">
+        <button class="btn-close" onclick="closeLightbox()">×</button>
+        <img id="lightbox-img" src="" alt="Zoomed Memory">
+    </div>
+
+    <!-- Easter Egg Modal -->
+    <div id="ee-modal">
+        <div class="glass" style="padding: 40px 20px; max-width: 300px; text-align: center;">
+            <div class="subtitle">SECRET UNLOCKED</div>
+            <p style="margin: 20px 0;">"Psst...<br>sebenarnya semua game tadi cuma alasan supaya kamu lebih lama di sini."</p>
+            <div class="accent-text">hehe.</div>
+            <p style="margin-top: 10px;">— Kazu</p>
+            <button class="btn-premium" onclick="document.getElementById('ee-modal').classList.remove('show')" style="margin-top: 30px; padding: 10px 20px;">CLOSE</button>
+        </div>
+    </div>
+
+    <script>
+        /* =========================================
+           1. CORE SYSTEM & STATE
+           ========================================= */
+        const state = {
+            currentSection: 1,
+            totalSections: 6,
+            musicPlaying: false,
+            gameIndex: 0,
+            easterEggClicks: 0
+        };
+
+        const sectionNames = ["", "01 STORY", "02 LETTER", "03 MEMORIES", "04 GAMES", "05 LYRICS", "06 FINAL"];
+
+        // DOM Elements
+        const audio = document.getElementById('bg-audio');
+        const sections = document.querySelectorAll('.section');
+        const nav = document.getElementById('navigation');
+        const musicCtrl = document.getElementById('music-controller');
+        const navIndicator = document.getElementById('nav-indicator');
+        
+        // Setup Ambient Particles
+        const ambient = document.getElementById('ambient');
+        for(let i=0; i<15; i++) {
+            let p = document.createElement('div');
+            p.className = 'particles';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = (Math.random() * 100 + 100) + '%';
+            p.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            ambient.appendChild(p);
+        }
+
+        /* =========================================
+           2. OPENING CINEMATIC
+           ========================================= */
+        window.addEventListener('DOMContentLoaded', () => {
+            // Sequence timing
+            setTimeout(() => document.getElementById('op-1').classList.add('show'), 500);
+            setTimeout(() => document.getElementById('op-2').classList.add('show'), 2000);
+            setTimeout(() => document.getElementById('op-3').classList.add('show'), 3500);
+            setTimeout(() => document.getElementById('btn-open').classList.add('show'), 5000);
+        });
+
+        document.getElementById('btn-open').addEventListener('click', () => {
+            const op = document.getElementById('opening');
+            op.style.opacity = '0';
+            op.style.filter = 'blur(20px)';
+            
+            setTimeout(() => {
+                op.classList.add('hidden');
+                // Show UI
+                nav.classList.add('show');
+                musicCtrl.classList.add('show');
+                updateSection();
+                toggleMusic(); // Try to play
+            }, 1500);
+        });
+
+        /* =========================================
+           3. NAVIGATION
+           ========================================= */
+        document.getElementById('btn-prev').addEventListener('click', () => {
+            if(state.currentSection > 1) {
+                state.currentSection--;
+                updateSection();
+            }
+        });
+
+        document.getElementById('btn-next').addEventListener('click', () => {
+            if(state.currentSection < state.totalSections) {
+                state.currentSection++;
+                updateSection();
+            }
+        });
+
+        function updateSection() {
+            sections.forEach((sec, idx) => {
+                if(idx + 1 === state.currentSection) {
+                    sec.classList.add('active');
+                } else {
+                    sec.classList.remove('active');
+                }
+            });
+            navIndicator.innerText = sectionNames[state.currentSection];
+            
+            // Handle buttons visibility
+            document.getElementById('btn-prev').style.opacity = state.currentSection === 1 ? '0.3' : '1';
+            document.getElementById('btn-next').style.opacity = state.currentSection === state.totalSections ? '0.3' : '1';
+        }
+
+        /* =========================================
+           4. MUSIC SYSTEM
+           ========================================= */
+        const btnPlayPause = document.getElementById('btn-play-pause');
+        const iconPlay = document.getElementById('icon-play');
+        const iconPause = document.getElementById('icon-pause');
+        const visualizer = document.getElementById('visualizer');
+        const timeDisplay = document.getElementById('music-time');
+        const btnFinalMusic = document.getElementById('btn-final-music');
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    state.musicPlaying = true;
+                    updateMusicUI();
+                }).catch(e => {
+                    // Autoplay blocked or file missing
+                    console.log("Audio play failed: ", e);
+                    state.musicPlaying = false;
+                    updateMusicUI();
+                });
+            } else {
+                audio.pause();
+                state.musicPlaying = false;
+                updateMusicUI();
+            }
+        }
+
+        function updateMusicUI() {
+            if (state.musicPlaying) {
+                iconPlay.style.display = 'none';
+                iconPause.style.display = 'block';
+                visualizer.classList.remove('paused');
+                btnFinalMusic.innerText = "PAUSE OUR SONG";
+            } else {
+                iconPlay.style.display = 'block';
+                iconPause.style.display = 'none';
+                visualizer.classList.add('paused');
+                btnFinalMusic.innerText = "PLAY OUR SONG";
+            }
+        }
+
+        btnPlayPause.addEventListener('click', toggleMusic);
+        btnFinalMusic.addEventListener('click', toggleMusic);
+
+        audio.addEventListener('timeupdate', () => {
+            let mins = Math.floor(audio.currentTime / 60);
+            let secs = Math.floor(audio.currentTime % 60);
+            if(secs < 10) secs = '0' + secs;
+            timeDisplay.innerText = `${mins}:${secs}`;
+            syncLyrics();
+        });
+
+        /* =========================================
+           5. GALLERY LIGHTBOX
+           ========================================= */
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            setTimeout(() => lightboxImg.src = "", 400);
+        }
+
+        /* =========================================
+           6. MINI GAMES
+           ========================================= */
+        const gamesData = [
+            {
+                title: "GAME 01 — KENAL AKU NGGAK?",
+                q: "Menurut kamu, siapa yang paling sayang sama Wilda?",
+                options: ["Kazu", "Tetangga", "Tukang bakso", "Orang lain"],
+                correct: 0,
+                feedbackTrue: "NAH, BENER.<br>Akhirnya kamu sadar juga.",
+                feedbackFalse: "SALAH.<br>Kita perlu ngobrol serius kayaknya."
+            },
+            {
+                title: "GAME 02 — PERTANYAAN JEBAKAN",
+                q: "Wilda pilih salah satu.",
+                options: ["Kazu", "Kazu", "Kazu", "Kazu"],
+                correct: -1, // all true
+                feedbackTrue: "Hmm... pilihan yang sulit ya?<br><br>Jawabannya tetap Kazu."
+            },
+            {
+                title: "GAME 03 — UJIAN PACAR",
+                q: "Kalau Kazu bilang 'aku gapapa', artinya apa?",
+                options: ["Benar-benar gapapa", "Lagi tidur", "Ada sesuatu", "Harus ditanya lagi"],
+                correct: 2, 
+                feedbackTrue: "TEST COMPLETE.<br>Kamu lulus jadi PACAR FAVORIT KAZU. 🎉",
+                feedbackFalse: "TEST COMPLETE.<br>Kurang peka, tapi MASIH BOLEH PACARAN. ❤️"
+            },
+            {
+                title: "GAME 04 — TEBAK MAUNYA KAZU",
+                q: "Kira-kira Kazu sekarang maunya apa?",
+                options: ["Makan", "Tidur", "Main game", "Perhatian dari Wilda"],
+                correct: 3,
+                feedbackTrue: "YES.<br>Akhirnya ada yang ngerti.",
+                feedbackFalse: "Boleh juga...<br>Tapi perhatian Wilda tetap nomor satu."
+            },
+            {
+                title: "GAME 05 — NGGAK BISA KABUR",
+                type: "escape",
+                q: "Wilda mau sayang Kazu?"
+            },
+            {
+                title: "GAME 06 — SIAPA YANG PALING?",
+                q: "Siapa yang paling suka bikin Wilda kesel?",
+                options: ["Kazu", "Kazu", "Kazu", "Jelas Kazu"],
+                correct: 3,
+                feedbackTrue: "BETUL.<br><br>Tapi tetap sayang kan?"
+            },
+            {
+                title: "GAME 07 — FINAL QUESTION",
+                q: "Kalau suatu hari semua game ini hilang, semua foto hilang, dan semua kata-kata di website ini hilang...<br><br>kamu masih mau tetap sama Kazu?",
+                options: ["YES", "OF COURSE"],
+                correct: -1,
+                feedbackTrue: "Jawaban kamu sudah disimpan.<br><br><span style='font-family:var(--font-display); color:var(--color-blue); font-size:1.5rem;'>MY GIRL,<br>MY GIRL.</span>"
+            }
+        ];
+
+        const gameContent = document.getElementById('game-content');
+        const gameTitle = document.getElementById('game-title');
+        const gameFeedback = document.getElementById('game-feedback');
+
+        function startGame() {
+            state.gameIndex = 0;
+            renderGame();
+        }
+
+        function renderGame() {
+            gameFeedback.classList.remove('show');
+            const g = gamesData[state.gameIndex];
+            
+            document.getElementById('game-subtitle').innerText = g.title;
+            gameTitle.innerHTML = g.q;
+
+            if(g.type === "escape") {
+                gameContent.innerHTML = `
+                    <div style="position:relative; height: 150px; width:100%; margin-top:20px;">
+                        <button class="btn-game" style="position:absolute; left:20%; width:100px;" onclick="handleAnswer(true)">MAU</button>
+                        <button class="btn-game" id="btn-escape" style="position:absolute; right:20%; width:100px; transition: 0.2s ease;">NGGAK</button>
+                    </div>
+                `;
+                setupEscapeButton();
+            } else {
+                let html = '<div class="game-options">';
+                g.options.forEach((opt, idx) => {
+                    html += `<button class="btn-game" onclick="handleAnswer(${idx === g.correct || g.correct === -1}, this)">${opt}</button>`;
+                });
+                html += '</div>';
+                gameContent.innerHTML = html;
+            }
+        }
+
+        let escapeCount = 0;
+        function setupEscapeButton() {
+            const btnEsc = document.getElementById('btn-escape');
+            if(!btnEsc) return;
+            
+            const moveBtn = () => {
+                escapeCount++;
+                if(escapeCount > 3) {
+                    btnEsc.innerHTML = "hehe, nggak bisa kabur.";
+                }
+                // Random within container (max-width 400px, height 150px)
+                const rx = Math.random() * 200;
+                const ry = Math.random() * 100;
+                btnEsc.style.left = `${rx}px`;
+                btnEsc.style.top = `${ry}px`;
+            };
+            
+            btnEsc.addEventListener('touchstart', (e) => { e.preventDefault(); moveBtn(); }, {passive: false});
+            btnEsc.addEventListener('mouseenter', moveBtn);
+            btnEsc.addEventListener('click', moveBtn);
+        }
+
+        function handleAnswer(isCorrect, btnEl = null) {
+            const g = gamesData[state.gameIndex];
+            
+            if(btnEl) {
+                const allBtns = document.querySelectorAll('.btn-game');
+                allBtns.forEach(b => b.style.pointerEvents = 'none'); // Disable clicking others
+                if(isCorrect || g.correct === -1) {
+                    btnEl.classList.add('correct');
+                } else {
+                    btnEl.classList.add('wrong');
+                }
+            }
+
+            if(g.type === "escape" && isCorrect) {
+                gameFeedback.innerHTML = `AKU SUDAH TAU. ❤️<br><br><button class="btn-premium glow" onclick="nextGame()">LANJUT</button>`;
+            } else {
+                gameFeedback.innerHTML = `${isCorrect || g.correct === -1 ? g.feedbackTrue : g.feedbackFalse}<br><br><button class="btn-premium glow" onclick="nextGame()">${state.gameIndex === gamesData.length - 1 ? 'SELESAI' : 'LANJUT'}</button>`;
+            }
+            
+            gameFeedback.classList.add('show');
+        }
+
+        function nextGame() {
+            state.gameIndex++;
+            if(state.gameIndex < gamesData.length) {
+                renderGame();
+            } else {
+                document.getElementById('game-subtitle').innerText = "GAMES COMPLETED";
+                gameTitle.innerHTML = "Terima kasih sudah main.<br>Semoga kamu senyum hari ini.";
+                gameContent.innerHTML = `<button class="btn-premium glow" onclick="document.getElementById('btn-next').click()">LANJUT KE LYRICS</button>`;
+                gameFeedback.classList.remove('show');
+            }
+        }
+
+        /* =========================================
+           7. LYRICS SYSTEM
+           ========================================= */
+        // MASUKKAN LIRIK DAN TIMESTAMP LAGU DI SINI
+        const lyrics = [
+            { time: 0, text: "TULIS LIRIK DI SINI" },
+            { time: 5, text: "TULIS LIRIK DI SINI" },
+            { time: 10, text: "TULIS LIRIK DI SINI" }
+        ];
+
+        const elPrev = document.getElementById('lyric-prev');
+        const elCurr = document.getElementById('lyric-curr');
+        const elNext = document.getElementById('lyric-next');
+        let currentLyricIdx = -1;
+
+        function syncLyrics() {
+            if(lyrics.length === 0) return;
+            const t = audio.currentTime;
+            
+            let newIdx = -1;
+            for(let i = 0; i < lyrics.length; i++) {
+                if(t >= lyrics[i].time) {
+                    newIdx = i;
+                } else {
+                    break;
+                }
+            }
+
+            if(newIdx !== currentLyricIdx) {
+                currentLyricIdx = newIdx;
+                
+                if(newIdx === -1) {
+                    elPrev.innerText = "";
+                    elCurr.innerText = "Lyrics will appear here.";
+                    elNext.innerText = "";
+                } else {
+                    elPrev.innerText = newIdx > 0 ? lyrics[newIdx-1].text : "";
+                    elCurr.innerText = lyrics[newIdx].text;
+                    elNext.innerText = newIdx < lyrics.length - 1 ? lyrics[newIdx+1].text : "";
+                    
+                    // Trigger reflow for animation
+                    elCurr.style.transform = 'scale(0.95)';
+                    setTimeout(() => elCurr.style.transform = 'scale(1)', 50);
+                }
+            }
+        }
+
+        /* =========================================
+           8. EASTER EGG
+           ========================================= */
+        const eeTriggers = document.querySelectorAll('.ee-trigger');
+        const eeModal = document.getElementById('ee-modal');
+
+        eeTriggers.forEach(el => {
+            el.addEventListener('click', () => {
+                state.easterEggClicks++;
+                if(state.easterEggClicks === 5) {
+                    eeModal.classList.add('show');
+                    state.easterEggClicks = 0; // reset
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
